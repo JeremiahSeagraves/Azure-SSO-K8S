@@ -1,0 +1,38 @@
+## Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-azure-sso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-azure-sso
+  template:
+    metadata:
+      labels:
+        app: hello-azure-sso
+    spec:
+      containers:
+        - name: app
+          image: com.jeremiahseagraves.cloud.azure-sso-k8s:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 5000
+          imagePullPolicy: IfNotPresent
+
+
+---
+
+## Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-azure-sso
+spec:
+  selector:
+    app: hello-azure-sso
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: LoadBalancer
+
